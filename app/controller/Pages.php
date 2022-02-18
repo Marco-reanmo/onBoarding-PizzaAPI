@@ -1,17 +1,13 @@
 <?php
     class Pages extends Controller{
         
-        private $studentModel;
-
         public function __construct() {
-            $this->studentModel = $this->loadModel('Student');
+            //Instantiiere Model
         }
         
         public function index() {
-            $students = $this->studentModel->getAllStudents();
             $data = [
-                'title' => 'Index',
-                'students' => $students    
+                'title' => 'Pizza API',
             ];
             $this->loadView('pages/index', $data);;
         }

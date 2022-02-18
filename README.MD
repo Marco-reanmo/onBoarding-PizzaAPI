@@ -1,10 +1,43 @@
-# OnBoarding reanmo 2022
+# Projekt: Pizza API 
 
-## MVC Framework
-Ziel der Lerneinheit:<br> Du wirst lernen was ein PHP Framework ist, wie man mit PHP sein eigenes MVC Framework baut und wie man dieses einsetzen kann, um eine eigene API zu programmieren. Dabei lernst Du unter anderem auch wie man eine Nutzer Authentifizierung mit diesem Framework umsetzt. Durch diesen Udemy Kurs wirst Du bereits bestehende PHP Frameworks wie Symfony oder Laravel schneller zu begreifen und einsetzen zu können.
+Du bekommst Anforderungen an eine API, mit der ein Online Pizzashop abgebildet werden soll. Mit Hilfe dieser Anforderungen und einem Mockup für eine Mobile Applikation sollst Du nun eine API mithilfe des PHP-Frameworks entwickeln, welches du zuvor erstellt hast. Überlege dir anhand des Mockups selbst, welche Felder die jeweiligen Models implementieren sollten. 
 
-## Ressourcen
-Udemy-Kurs: https://www.udemy.com/course/object-oriented-php-mvc/learn/lecture/8283382#overview
+ 
 
-### Bemerkung
-Datenbank-Verbindung wurde zu Testzwecken mit Datenbank "university" hergestellt und greift auf Tabelle "students" zu. Deshalb ist es möglich, dass einzelne Sichten auf anderen Rechnern noch Fehler werfen, sollte diese Tabelle in der entsprechenden Datenbank nicht existieren. Außerdem muss in der .htaccess im public-Ordner bei "Rewrite Base" der Dateipfad individuell zum Projekt angepasst werden.
+## Ressourcen: 
+
+XD Datei & Anforderungen 
+
+ 
+
+## Anforderungen: 
+
+Im Folgenden werden verschiedene Routen aufgelistet, welche deine API anbieten sollte. 
+
+\[POST]: /register 
+
+-> Zum Registrieren eines Nutzers mit {name, email, phone, password} 
+
+\[POST]: /login
+
+-> Zum Einloggen eines Nutzers mit {email, password} 
+
+\[GET]: /products 
+
+-> Array mit Produkten {id, name, category, image_path, sizes: [{ id, name, price }]} 
+
+\[GET]: /categories 
+
+-> Array mit Kategorien (id, name) 
+
+\[POST]: /order 
+
+-> Array mit der Auswahl {product_id, size_id, amount} 
+
+\[GET]: /orders  
+
+-> Array mit allen bereits getätigten Bestellungen 
+
+\[GET, PUT]: /profile 
+
+-> Informationen des aktuell eingeloggten Nutzers  {name, email, phone, password} 
