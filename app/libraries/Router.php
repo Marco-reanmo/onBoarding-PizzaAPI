@@ -49,7 +49,8 @@
         return new $classname;
       } else { //Default
         require_once APPROOT . 'controller/Pages.php';
-        return 'Pages';
+        $classname = 'Pages';
+        return new $classname;
       }
     }
 
