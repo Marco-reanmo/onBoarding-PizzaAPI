@@ -9,6 +9,7 @@
             }
             $this->productModel = $this->loadModel('Product');
             $this->ingredientModel = $this->loadModel('Ingredient');
+            $this->productImageModel = $this->loadModel('Product_Image');
         }
         
         public function index() {
@@ -23,9 +24,11 @@
         public function details($id) {
             $product = $this->productModel->getProductById($id);
             $ingredients = $this->ingredientModel->getIngredientsByProductID($product->ID);
+            $productImage = $this->productImageModel->getProductImageByProductID($product->ID);
             $data = [
                 'product' => $product,
-                'ingredients' => $ingredients
+                'ingredients' => $ingredients,
+                'product_image' => $productImage
             ];
             $this->loadView('products/details', $data);
         }
