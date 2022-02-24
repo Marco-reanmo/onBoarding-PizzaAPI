@@ -8,6 +8,7 @@
                 redirect('users/login');
             }
             $this->productModel = $this->loadModel('Product');
+            $this->ingredientModel = $this->loadModel('Ingredient');
         }
         
         public function index() {
@@ -21,8 +22,10 @@
 
         public function details($id) {
             $product = $this->productModel->getProductById($id);
+            $ingredients = $this->ingredientModel->getIngredientsByProductID($product->ID);
             $data = [
-                'product' => $product
+                'product' => $product,
+                'ingredients' => $ingredients
             ];
             $this->loadView('products/details', $data);
         }
