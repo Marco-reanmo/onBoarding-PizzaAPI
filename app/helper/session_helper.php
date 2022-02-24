@@ -16,5 +16,9 @@
                 $class = !empty($_SESSION[$name . '_class']) ? $_SESSION[$name . '_class'] : '';
                 echo '<div class="' . $class . '" id="msg-flash">' . $_SESSION[$name] . '</div>';
             }
-        }
+        }   
+    }
+
+    function isLoggedIn() {
+        return isset($_SESSION['user_id']);
     }
