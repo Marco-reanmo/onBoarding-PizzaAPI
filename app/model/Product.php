@@ -10,4 +10,10 @@
             $this->database->query('SELECT * FROM products');
             return $this->database->resultSet();
         }
+
+        public function getProductById($id) {
+            $this->database->query('SELECT * FROM products WHERE products.ID = :id');
+            $this->database->bind(':id', $id);
+            return $this->database->single();
+        }
     }

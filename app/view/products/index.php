@@ -5,7 +5,7 @@
 
 <ul>
     <?php foreach($data['products'] as $product):?>
-        <li><?php echo $product->name . ', ' . $product->price?></li>
+        <li><a href='<?php echo URLROOT . 'products/details/' . $product->ID?>'><?php echo $product->name?></a></li>
     <?php endforeach;?>
 </ul>
 

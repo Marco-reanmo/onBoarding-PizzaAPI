@@ -19,10 +19,13 @@
             $this->loadView('products/index', $data);;
         }
 
-        /*
-        public function about() {
-            $this->loadView('products/about');
+        public function details($id) {
+            $product = $this->productModel->getProductById($id);
+            $data = [
+                'product' => $product
+            ];
+            $this->loadView('products/details', $data);
         }
-        */
+        
     }
     
