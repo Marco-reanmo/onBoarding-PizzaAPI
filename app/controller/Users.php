@@ -8,9 +8,7 @@
         }
 
         public function index() {
-            //Todo: Die Funktion sinnvoll verwenden
-            echo 'Um dich zu einzuloggen wechsle bitte zur URL .../users/login.<br>';
-            echo 'Um dich zu registrieren wechsle bitte zur URL .../users/register.<br>';
+            redirect('users/login');
         }
 
         public function register() {

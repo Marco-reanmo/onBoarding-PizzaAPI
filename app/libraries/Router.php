@@ -48,8 +48,8 @@
         require_once APPROOT . 'controller/'. $classname . '.php';
         return new $classname;
       } else { //Default
-        require_once APPROOT . 'controller/Pages.php';
-        $classname = 'Pages';
+        require_once APPROOT . 'controller/Users.php';
+        $classname = 'Users';
         return new $classname;
       }
     }
