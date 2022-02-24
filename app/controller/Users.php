@@ -14,17 +14,13 @@
         }
 
         public function register() {
-            if($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $post_data = $this->getSanitizedPostData();
+            if(isPostRequest()) {
+                $post_data = getSanitizedPostData();
                 $this->processRegisterForm($post_data);
             } else {
                 $data = $this->initRegisterData();
                 $this->loadView('users/register', $data);    
             }
-        }
-
-        private function getSanitizedPostData() {
-            return filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
         }
 
         private function processRegisterForm($post_data) {
@@ -203,8 +199,8 @@
         }
 
         public function login() {
-            if($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $post_data = $this->getSanitizedPostData();
+            if(isPostRequest()) {
+                $post_data = getSanitizedPostData();
                 $this->processLoginForm($post_data);
             } else {
                 $data = $this->initLoginData();
