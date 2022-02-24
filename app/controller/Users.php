@@ -220,7 +220,7 @@
                         $loggedInUser->email,
                         $loggedInUser->name
                     );
-                    redirect('pages/index');
+                    redirect('products/index');
                 } else {
                     $validatedData['email_error'] = 'Fehler bei der Anmeldung';
                     $this->loadView('users/login', $validatedData);
