@@ -1,6 +1,10 @@
 <?php require_once APPROOT . 'view/inc/header.php';?>
 
 <h1>Login</h1>
+<?php 
+    require_once APPROOT . 'bootstrap.php';
+    flash('register_success')
+?>
 <form action="<?php echo URLROOT . 'users/login' ?>" method="POST">
     <label for="email">E-Mail</label>
     <input type="text" name="email" value="<?php echo $data['email'] ?>">

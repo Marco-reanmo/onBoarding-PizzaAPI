@@ -42,6 +42,7 @@
             if($this->registerDataHasNoErrors($validatedData)) {
                 $result = $this->userModel->register($validatedData);
                 if(!is_null($result)) {
+                    flash('register_success', 'Registrierung erfolgreich.');
                     header('Location: ' . URLROOT . '/users/login');
                 } else {
                     die('Ein unerwarteter Fehler ist aufgetreten');
@@ -220,7 +221,12 @@
             if($this->loginDataHasNoErrors($validatedData)) {
                 $loggedInUser = $this->userModel->login($validatedData['email'], $validatedData['password']);
                 if($loggedInUser) {
-                    die('Success');
+                    $this->createUserSession(
+                        $loggedInUser->ID,
+                        $loggedInUser->email,
+                        $loggedInUser->name
+                    );
+                    redirect('pages/index');
                 } else {
                     $validatedData['email_error'] = 'Fehler bei der Anmeldung';
                     $this->loadView('users/login', $validatedData);
@@ -277,5 +283,23 @@
               'email_error' => '',
               'password_error' => ''
             ];
+        }
+
+        private function createUserSession($id, $email, $name) {
+            $_SESSION['user_id'] = $id;
+            $_SESSION['user_email'] = $email;
+            $_SESSION['user_name'] = $name;
+        }
+
+        public function logout() {
+            unset($_SESSION['user_id']);
+            unset($_SESSION['user_email']);
+            unset($_SESSION['user_name']);
+            session_destroy();
+            $this->loadView('users/login');
+        }
+
+        public function isLoggedIn() {
+            return isset($_SESSION['user_id']);
         }
     }
