@@ -7,4 +7,5 @@
         <li><?php echo $ingredient->name?></li>
     <?php endforeach;?>
 </ul>
+<a href="<?php echo URLROOT . 'products/index'?>">Zurück</a>
 <?php require_once APPROOT . 'view/inc/footer.php';?>
