@@ -7,12 +7,12 @@
         $qtySum = 0;
         foreach($data['basket'] as $basketItem) {
             $tmpPrice = (double) $basketItem->price * (double) $basketItem->quantity;
-            echo '<li>' . $basketItem->product . ' -- ' . $basketItem->quantity . ' Stück -- ' . $tmpPrice . '€</li>';
+            echo '<li>' . $basketItem->product . ' -- ' . $basketItem->quantity . ' Stück -- ' . number_format($tmpPrice, 2, ',', '.') . '€</li>';
             $priceSum += $tmpPrice;
             $qtySum += (double) $basketItem->quantity;
         }
         echo '<hr>';
-        echo '<li><strong>Gesamt</strong> -- ' . $qtySum . ' Stück -- ' . $priceSum . '€</li>';
+        echo '<li><strong>Gesamt</strong> -- ' . $qtySum . ' Stück -- ' . number_format($priceSum, 2, ',', '.') . '€</li>';
     } else {
         echo '<li>Warenkorb noch leer.</li>';
     }
