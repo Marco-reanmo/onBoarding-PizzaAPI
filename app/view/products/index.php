@@ -21,7 +21,7 @@
 <?php flash('add_success');?>
 <a href="<?php echo URLROOT?>/users/logout">Logout</a>
 <br>
-<a href="<?php echo URLROOT . "/products/baskets/" . $_SESSION['user_id']?>">Warenkorb</a>
+<a href="<?php echo URLROOT . "products/baskets/" . $_SESSION['user_id']?>">Warenkorb</a>
 <br>
-<a href="<?php echo URLROOT . "/orders/overview/" . $_SESSION['user_id']?>">Bestell-Historie</a>
+<a href="<?php echo URLROOT . "orders/overview/" . $_SESSION['user_id']?>">Bestell-Historie</a>
 <?php require_once APPROOT . 'view/inc/footer.php';?>
