@@ -40,6 +40,10 @@
             if(isLoggedIn()) {
                 unset($_SESSION['add_success']);
                 if($_SESSION['user_id'] == $userId) {
+                    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        $post = getSanitizedPostData();
+                        $this->basketModel->deleteProductFromBasket($post['basket_id'], $post['product_id']);
+                    }
                     $session_basket = null;
                     if(isset($_SESSION['basket_id'])) {
                         $session_basket = $this->basketModel->getBasketById($_SESSION['basket_id']);                    

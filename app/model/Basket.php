@@ -7,7 +7,7 @@
         }
 
         public function getBasketById($id) {
-            $this->database->query('SELECT products.name AS product, products.price AS price, baskets.quantity 
+            $this->database->query('SELECT products.name AS product, products.price AS price, baskets.quantity, baskets.ID, baskets.product_ID
                                     FROM `baskets` 
                                     JOIN products ON products.ID = baskets.product_ID 
                                     WHERE baskets.ID = :id');
@@ -44,5 +44,14 @@
             $this->database->bind(':productId', $productId);
             $this->database->execute();
             return $this->database->lastInsertId();
+        }
+
+        public function deleteProductFromBasket($basketId, $productId) {
+            $this->database->query('DELETE FROM baskets 
+                                    WHERE ID = :basketID AND product_ID = :productID');
+            $this->database->bind(':basketID', $basketId);
+            $this->database->bind(':productID', $productId);
+            $this->database->execute();
+            return $basketId;
         }
     }
