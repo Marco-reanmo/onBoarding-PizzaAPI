@@ -1,4 +1,6 @@
 <?php
+    require_once APPROOT . 'bootstrap.php';
+
     class Products extends Controller{
         
         private $productModel;
@@ -10,6 +12,7 @@
             $this->productModel = $this->loadModel('Product');
             $this->ingredientModel = $this->loadModel('Ingredient');
             $this->productImageModel = $this->loadModel('Product_Image');
+            $this->basketModel = $this->loadModel('Basket');
         }
         
         public function index() {
@@ -31,6 +34,55 @@
                 'product_image' => $productImage
             ];
             $this->loadView('products/details', $data);
+        }
+
+        public function baskets($userId) {
+            if(isLoggedIn()) {
+                unset($_SESSION['add_success']);
+                if($_SESSION['user_id'] == $userId) {
+                    $session_basket = null;
+                    if(isset($_SESSION['basket_id'])) {
+                        $session_basket = $this->basketModel->getBasketById($_SESSION['basket_id']);                    
+                    }
+                    $data = [
+                        'user_id' => $userId,
+                        'basket' => $session_basket
+                    ];
+                    $this->loadView('products/baskets', $data);  
+                } else {
+                    redirect('products/index');
+                }
+            } else {
+                redirect('users/login');
+            };
+        }
+
+        public function add() {
+            if(isLoggedIn()) {
+                if(isPostRequest()) {
+                    unset($_SESSION['add_success']);
+                    $post = getSanitizedPostData();
+                    if(isset($_SESSION['basket_id'])) {
+                        $this->basketModel->addToBasket($_SESSION['basket_id'], $post['productId'], $post['quantity']);                      
+                    } else {
+                        $basket_id = $this->basketModel->add($post['productId'], $post['quantity']);
+                        $_SESSION['basket_id'] = $basket_id;
+                    }
+                    $allProducts = $this->productModel->getProducts();
+                    $data = [
+                        'title' => 'Pizza API',
+                        'products' => $allProducts
+                    ];
+                    $product = $this->productModel->getProductById($post['productId']);
+                    $msg = $post['quantity'] . ' x Pizza ' . $product->name . ' zum Warenkorb hinzugefügt';
+                    flash('add_success', $msg);
+                    $this->loadView('products/index', $data);
+                } else {
+                    redirect('products/index');
+                }
+            } else {
+                redirect('users/login');
+            };
         }
         
     }
