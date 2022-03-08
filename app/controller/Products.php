@@ -43,12 +43,17 @@
                     if($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $post = getSanitizedPostData();
                         $this->basketModel->deleteProductFromBasket($post['basket_id'], $post['product_id']);
+                        $basket = $this->basketModel->getBasketById($post['basket_id']);
+                        if(empty($basket)) {
+                            unset($_SESSION['basket_id']);
+                        }
                     }
                     $session_basket = null;
                     if(isset($_SESSION['basket_id'])) {
                         $session_basket = $this->basketModel->getBasketById($_SESSION['basket_id']);                    
                     }
                     $data = [
+                        'title' => "Warenkorb",
                         'user_id' => $userId,
                         'basket' => $session_basket
                     ];

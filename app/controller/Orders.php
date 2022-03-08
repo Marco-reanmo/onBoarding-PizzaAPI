@@ -1,11 +1,34 @@
 <?php
     require_once APPROOT . 'bootstrap.php';
 
-    class Orders extends Controller{
+    class Orders extends Controller {
 
         public function __construct() {
             $this->orderModel = $this->loadModel('Order');
             $this->productModel = $this->loadModel('Product');
+            $this->basketModel = $this->loadModel('Basket');
+        }
+
+        public function index() {
+            if(isLoggedIn()) {
+                if($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    $post = getSanitizedPostData();
+                    if (isset($post['basket_id'])) {
+                        $this->orderModel->postOrder($_SESSION['user_id'], $post['basket_id']);
+                        unset($_SESSION['basket_id']);
+                        $basket = $this->basketModel->getBasketById($post['basket_id']);
+                        $data['title'] = "Bestellung Abgeschlossen";
+                        $data['basket'] = $basket;
+                        $this->orderModel = $this->loadView('orders/index', $data);
+                    } else {
+                        redirect('orders/overview/' . $_SESSION['user_id']);
+                    }
+                } else {
+                    redirect('orders/overview/' . $_SESSION['user_id']);
+                }
+            } else {
+                redirect('users/login');
+            };
         }
 
         public function overview($userId) {

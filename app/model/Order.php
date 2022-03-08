@@ -1,6 +1,9 @@
 <?php
 
 class  Order {
+
+    private $database;
+
     public function __construct() {
         $this->database = new Database();
     }
@@ -20,7 +23,8 @@ class  Order {
         $this->database->query('INSERT INTO orders (user_ID, basket_ID)
                                 VALUES (:userID, :basketID)');
         $this->database->bind(':userID', $userId);
-        $this->database->bind('basketID', $basketId);
+        $this->database->bind(':basketID', $basketId);
+        $this->database->execute();
         return $this->database->lastInsertId();
     }
 }

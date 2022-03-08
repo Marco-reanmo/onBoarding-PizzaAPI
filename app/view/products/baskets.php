@@ -1,8 +1,8 @@
 <?php require_once APPROOT . 'view/inc/header.php';?>
-<h1>Warenkorb</h1>
+<h1><?php echo $data['title']?></h1>
 <ul>
     <?php
-    if(isset($_SESSION['basket_id'])) {
+    if(isset($data['basket'])) {
         $priceSum = 0;
         $qtySum = 0;
         foreach($data['basket'] as $basketItem) {
@@ -24,4 +24,8 @@
     ?>
 </ul>
 <a href="<?php echo URLROOT . 'products/index'?>">Zurück</a>
+<form action="<?php echo URLROOT . 'orders/index'?>" method="POST">
+    <input type="hidden" name="basket_id" value="<?php echo isset($_SESSION['basket_id']) ? $basketItem->ID : -1 ?>">
+    <input  type="<?php echo isset($_SESSION['basket_id']) ? 'submit' : 'hidden' ?>" value="Bestellung aufgeben">
+</form>
 <?php require_once APPROOT . 'view/inc/footer.php';?>
