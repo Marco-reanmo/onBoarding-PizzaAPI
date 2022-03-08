@@ -37,7 +37,7 @@
                 $result = $this->userModel->register($validatedData);
                 if(!is_null($result)) {
                     flash('register_success', 'Registrierung erfolgreich.');
-                    header('Location: ' . URLROOT . '/users/login');
+                    header('Location: ' . URLROOT . 'users/login');
                 } else {
                     die('Ein unerwarteter Fehler ist aufgetreten');
                 }
@@ -291,5 +291,142 @@
             unset($_SESSION['user_name']);
             session_destroy();
             redirect('users/login');
+        }
+
+        public function profile() {
+            if(isLoggedIn()) {
+                if(isPostRequest()) {
+                    $post = getSanitizedPostData();
+                    $this->processProfileForm($post);
+                }
+                
+                $user = $this->userModel->getUserById($_SESSION['user_id']);
+                $data = $this->initProfileDataWith(
+                    $user->name,
+                    $user->email,
+                    '',
+                    '',
+                    '',
+                    $user->postalCode,
+                    $user->city,
+                    $user->street,
+                    $user->houseNumber
+                );
+                $data['title'] = 'Profil';
+                $this->loadView('users/profile', $data);  
+            } else {
+                redirect('users/login');
+            };
+        }
+
+        private function processProfileForm($post_data) {
+            $data = $this->initProfileDataWith(
+                trim($post_data['name']),
+                trim($post_data['email']),
+                trim($post_data['old_password']),
+                trim($post_data['new_password']),
+                trim($post_data['confirm_password']),
+                trim($post_data['postal_code']),
+                trim($post_data['city']),
+                trim($post_data['street']),
+                trim($post_data['house_number'])
+            );
+            $validatedData = $this->validateProfileData($data);
+            $validatedData['title'] = 'Profil';
+            if($this->profileDataHasNoErrors($validatedData)) {
+                $validatedData['user_id'] = $_SESSION['user_id'];
+                $result = $this->userModel->update($validatedData);
+                if(!is_null($result)) {
+                    flash('update_success', 'Update erfolgreich.');
+                    $this->loadView('users/profile', $validatedData);
+                } else {
+                    die('Ein unerwarteter Fehler ist aufgetreten');
+                }
+            } else {
+                $this->loadView('users/profile', $validatedData);
+            }
+        }
+
+        private function validateProfileData($data) {
+            $data['name_error'] = $this->validateName($data['name']);
+            $data['email_error'] = $this->validateProfilEmail($data['email']);
+            $data['old_password_error'] = $this->validateOldPassword($data['old_password']);
+            $data['new_password_error'] = $this->validateRegistratedPassword($data['new_password']);
+            $data['confirm_password_error'] = $this->validateConfirmPassword($data['new_password'], $data['confirm_password']);
+            $data['postal_code_error'] = $this->validatePostalCode($data['postal_code']);
+            $data['city_error'] = $this->validateCity($data['city']);
+            $data['street_error'] = $this->validateStreet($data['street']);
+            $data['house_number_error'] = $this->validateHouseNumber($data['house_number']);
+            return $data; 
+        }
+
+        private function validateProfilEmail($email) {
+            if(empty($email)) {
+                return 'Bitte eine E-Mail Adresse eingeben';
+            } elseif($this->userModel->emailIsTaken($email)) {
+                $user = $this->userModel->getUserById($_SESSION['user_id']);
+                if($user->email == $email) {
+                    return '';
+                }
+                return 'Es existiert bereits ein Konto mit dieser E-Mail';
+            } else {
+                return '';
+            }
+        }
+
+        private function validateOldPassword($old_password) {
+            if(empty($old_password)) {
+                return 'Bitte das Alte Password eingeben';
+            } 
+            $user = $this->userModel->getUserById($_SESSION['user_id']);
+            if(password_verify($old_password, $user->password)) {
+                return '';;
+            }    
+            return 'Das alte Passwort stimmt nicht überein';
+        }
+
+        private function profileDataHasNoErrors($data) {
+            return empty($data['name_error']) 
+                && empty($data['email_error']) 
+                && empty($data['old_password_error'])
+                && empty($data['new_password_error']) 
+                && empty($data['confirm_password_error'])
+                && empty($data['postal_code_error'])
+                && empty($data['city_error'])
+                && empty($data['street_error'])
+                && empty($data['house_number_error']);
+        }
+
+        private function initProfileDataWith(
+            $name, 
+            $email, 
+            $oldPassword,
+            $newPassword, 
+            $confirm_password, 
+            $postal_code,
+            $city,
+            $street,
+            $house_number
+            ) {
+            return [
+                'name' => $name,
+                'email' => $email,
+                'old_password' => $oldPassword,
+                'new_password' => $newPassword,
+                'confirm_password' => $confirm_password,
+                'postal_code' => $postal_code,
+                'city' => $city,
+                'street' => $street,
+                'house_number' => $house_number,
+                'name_error' => '',
+                'email_error' => '',
+                'old_password_error' => '',
+                'new_password_error' => '',
+                'confirm_password_error' => '',
+                'postal_code_error' => '',
+                'city_error' => '',
+                'street_error' => '',
+                'house_number_error' => ''      
+              ];
         }
     }

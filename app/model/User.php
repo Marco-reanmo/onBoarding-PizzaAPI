@@ -57,4 +57,43 @@
             }
         }
 
+        public function getUserById($id) {
+            $this->database->query('SELECT * 
+                                    FROM users
+                                    JOIN addresses ON users.address_ID = addresses.ID
+                                    WHERE users.ID = :id');
+            $this->database->bind(':id', $id);
+            return $this->database->single();
+        }
+
+        public function update($userData) {
+            $this->database->query('SELECT *
+                                    FROM users
+                                    WHERE ID = :id');
+            $this->database->bind(':id', $userData['user_id']);
+            $user = $this->database->single();
+            $this->database->query('UPDATE users
+                                   SET users.name = :name,
+                                       users.email = :email,
+                                       users.password = :password
+                                   WHERE users.ID = :id');
+            $this->database->bind(':name', $userData['name']);
+            $this->database->bind(':email', $userData['email']);
+            $this->database->bind(':password', password_hash($userData['new_password'], PASSWORD_DEFAULT));
+            $this->database->bind(':id', $userData['user_id']);
+            $this->database->execute();
+            $this->database->query('UPDATE addresses
+                                   SET addresses.postalCode = :postalCode,
+                                       addresses.city = :city,
+                                       addresses.street = :street,
+                                       addresses.houseNumber = :houseNumber
+                                   WHERE addresses.ID = :id');
+          $this->database->bind(':postalCode', $userData['postal_code']);
+          $this->database->bind(':city', $userData['city']);
+          $this->database->bind(':street', $userData['street']);
+          $this->database->bind(':houseNumber', $userData['house_number']);
+          $this->database->bind(':id', $user->address_ID);
+          $this->database->execute();
+          return $userData['user_id'];
+        }
     }
