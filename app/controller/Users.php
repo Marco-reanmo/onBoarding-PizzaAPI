@@ -380,7 +380,7 @@
             } 
             $user = $this->userModel->getUserById($_SESSION['user_id']);
             if(password_verify($old_password, $user->password)) {
-                return '';;
+                return '';
             }    
             return 'Das alte Passwort stimmt nicht überein';
         }
