@@ -25,7 +25,6 @@
 </ul>
 <a href="<?php echo URLROOT . 'products/index'?>">Zurück</a>
 <form action="<?php echo URLROOT . 'orders/index'?>" method="POST">
-    <input type="hidden" name="basket_id" value="<?php echo isset($_SESSION['basket_id']) ? $basketItem->ID : -1 ?>">
     <input  type="<?php echo isset($_SESSION['basket_id']) ? 'submit' : 'hidden' ?>" value="Bestellung aufgeben">
 </form>
 <?php require_once APPROOT . 'view/inc/footer.php';?>

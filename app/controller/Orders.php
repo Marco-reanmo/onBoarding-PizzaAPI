@@ -11,12 +11,11 @@
 
         public function index() {
             if(isLoggedIn()) {
-                if($_SERVER['REQUEST_METHOD'] === 'POST') {
-                    $post = getSanitizedPostData();
-                    if (isset($post['basket_id'])) {
-                        $this->orderModel->postOrder($_SESSION['user_id'], $post['basket_id']);
+                if(isPostRequest()) {
+                    if (isset($_SESSION['basket_id'])) {
+                        $this->orderModel->postOrder($_SESSION['user_id'], $_SESSION['basket_id']);
+                        $basket = $this->basketModel->getBasketById($_SESSION['basket_id']);
                         unset($_SESSION['basket_id']);
-                        $basket = $this->basketModel->getBasketById($post['basket_id']);
                         $data['title'] = "Bestellung Abgeschlossen";
                         $data['basket'] = $basket;
                         $this->orderModel = $this->loadView('orders/index', $data);
@@ -31,30 +30,26 @@
             };
         }
 
-        public function overview($userId) {
+        public function overview() {
             if(isLoggedIn()) {
-                if($_SESSION['user_id'] == $userId) {
-                    $allOrders = $this->orderModel->getOrdersByUserId($userId);
-                    $orders = array();
-                    foreach($allOrders as $orderItem) {
-                        if(!isset($orders[$orderItem->ID])) {
-                            $orders[$orderItem->ID]['products'] = array();
-                        }
-                        $orders[$orderItem->ID]['created_at'] = $orderItem->created_at;
-                        array_push($orders[$orderItem->ID]['products'], [
-                            'name' => $orderItem->name,
-                            'price' => (double)$orderItem->price,
-                            'quantity' => (double)$orderItem->quantity]
-                        );
+                $allOrders = $this->orderModel->getOrdersByUserId($_SESSION['user_id']);
+                $orders = array();
+                foreach($allOrders as $orderItem) {
+                    if(!isset($orders[$orderItem->ID])) {
+                        $orders[$orderItem->ID]['products'] = array();
                     }
-                    $data = [
-                        'title' => 'Ihre Bestellungen -- Übersicht',
-                        'orders' => $orders
-                    ];
-                    $this->loadView('orders/overview', $data);
-                } else {
-                    redirect('products/index');
+                    $orders[$orderItem->ID]['created_at'] = $orderItem->created_at;
+                    array_push($orders[$orderItem->ID]['products'], [
+                        'name' => $orderItem->name,
+                        'price' => (double)$orderItem->price,
+                        'quantity' => (double)$orderItem->quantity]
+                    );
                 }
+                $data = [
+                    'title' => 'Ihre Bestellungen -- Übersicht',
+                    'orders' => $orders
+                ];
+                $this->loadView('orders/overview', $data);
             } else {
                 redirect('users/login');
             };
