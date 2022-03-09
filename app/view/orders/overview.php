@@ -11,8 +11,8 @@
             echo '<li><strong>Ihre Bestellung vom ' . $orderItem['created_at'] . ':</strong>';
             echo '<ul>';
             foreach($orderItem['products'] as $product) {
-                $tmpPrice = $product['price'] *  $product['quantity'];
-                echo '<li>' . $product['name'] . ' -- ' . $product['quantity'] . ' Stück -- ' . number_format($tmpPrice, 2, ',', '.') . '€</li>';
+                $tmpPrice = $product['price'] *  $product['quantity'] * $product['factor'];
+                echo '<li>' . $product['name'] . ' -- ' . $product['size'] . ' -- ' . $product['quantity'] . ' Stück -- ' . number_format($tmpPrice, 2, ',', '.') . '€</li>';
                 $priceSum += $tmpPrice;
                 $qtySum +=  $product['quantity'];
             

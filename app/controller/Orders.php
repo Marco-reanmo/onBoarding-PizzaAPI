@@ -42,7 +42,10 @@
                     array_push($orders[$orderItem->ID]['products'], [
                         'name' => $orderItem->name,
                         'price' => (double)$orderItem->price,
-                        'quantity' => (double)$orderItem->quantity]
+                        'quantity' => (double)$orderItem->quantity,
+                        'size' => $orderItem->size,
+                        'factor' => (double) $orderItem->factor
+                        ]
                     );
                 }
                 $data = [

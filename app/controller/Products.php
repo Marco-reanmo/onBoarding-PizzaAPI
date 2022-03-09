@@ -13,6 +13,7 @@
             $this->ingredientModel = $this->loadModel('Ingredient');
             $this->productImageModel = $this->loadModel('Product_Image');
             $this->basketModel = $this->loadModel('Basket');
+            $this->sizeModel = $this->loadModel('Size');
         }
         
         public function index() {
@@ -67,10 +68,11 @@
                 if(isPostRequest()) {
                     unset($_SESSION['add_success']);
                     $post = getSanitizedPostData();
+                    $size = $this->sizeModel->getSizeByRadioButtonString($post['size']);
                     if(isset($_SESSION['basket_id'])) {
-                        $this->basketModel->addToBasket($_SESSION['basket_id'], $post['productId'], $post['quantity']);                      
+                        $this->basketModel->addToBasket($_SESSION['basket_id'], $post['productId'], $post['quantity'], $size->ID);                      
                     } else {
-                        $basket_id = $this->basketModel->add($post['productId'], $post['quantity']);
+                        $basket_id = $this->basketModel->add($post['productId'], $post['quantity'], $size->ID);
                         $_SESSION['basket_id'] = $basket_id;
                     }
                     $allProducts = $this->productModel->getProducts();
@@ -79,7 +81,7 @@
                         'products' => $allProducts
                     ];
                     $product = $this->productModel->getProductById($post['productId']);
-                    $msg = $post['quantity'] . ' x Pizza ' . $product->name . ' zum Warenkorb hinzugefügt';
+                    $msg = $post['quantity'] . ' x Pizza ' . $product->name . ' (' . $size->name . ') zum Warenkorb hinzugefügt';
                     flash('add_success', $msg);
                     $this->loadView('products/index', $data);
                 } else {

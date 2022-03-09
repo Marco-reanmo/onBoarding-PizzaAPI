@@ -5,9 +5,9 @@
     $priceSum = 0;
     $qtySum = 0;
     foreach($data['basket'] as $basketItem) {
-        $tmpPrice = (double) $basketItem->price * (double) $basketItem->quantity;
+        $tmpPrice = (double) $basketItem->price * (double) $basketItem->quantity * (double) $basketItem->factor;
         echo '<li>';
-        echo  $basketItem->product . ' -- ' . $basketItem->quantity . ' Stück -- ' . number_format($tmpPrice, 2, ',', '.') . '€';
+        echo  $basketItem->product . ' -- ' . $basketItem->size . ' -- ' . $basketItem->quantity . ' Stück -- ' . number_format($tmpPrice, 2, ',', '.') . '€';
         echo '</li>';
         $priceSum += $tmpPrice;
         $qtySum += (double) $basketItem->quantity;

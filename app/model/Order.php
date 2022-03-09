@@ -9,10 +9,11 @@ class  Order {
     }
 
     public function getOrdersByUserId($userId) {
-        $this->database->query('SELECT orders.ID, orders.created_at, orders.user_ID, orders.basket_ID, products.name, baskets.quantity, products.price 
+        $this->database->query('SELECT orders.ID, orders.created_at, orders.user_ID, orders.basket_ID, products.name, baskets.quantity, products.price , sizes.name AS size, sizes.factor
                                 FROM orders
                                 JOIN baskets ON baskets.ID = orders.basket_ID
                                 JOIN products ON products.ID = baskets.product_ID
+                                JOIN sizes ON sizes.ID = baskets.size_ID
                                 WHERE orders.user_id = :userId
                                 ORDER BY created_at DESC');
        $this->database->bind(':userId', $userId);
