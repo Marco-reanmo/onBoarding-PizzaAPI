@@ -14,13 +14,21 @@
             $this->productImageModel = $this->loadModel('Product_Image');
             $this->basketModel = $this->loadModel('Basket');
             $this->sizeModel = $this->loadModel('Size');
+            $this->categoryModel = $this->loadModel('Category');
         }
         
         public function index() {
-            $products = $this->productModel->getProducts();
+            $saladCategory = $this->categoryModel->getCategoryByName('Salat');
+            $pizzaCategory = $this->categoryModel->getCategoryByName('Pizza');
+            $drinkCategory = $this->categoryModel->getCategoryByName('Getränk');
+            $salads = $this->productModel->getProductsByCategory($saladCategory->ID);
+            $pizzas = $this->productModel->getProductsByCategory($pizzaCategory->ID);
+            $drinks = $this->productModel->getProductsByCategory($drinkCategory->ID);
             $data = [
-                'title' => 'Pizza API',
-                'products' => $products
+                'title' => 'Produkte',
+                'salads' => $salads,
+                'pizzas' => $pizzas,
+                'drinks' => $drinks
             ];
             $this->loadView('products/index', $data);;
         }
